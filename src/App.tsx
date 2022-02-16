@@ -1,26 +1,34 @@
 import React from 'react';
-import logo from './logo.svg';
+import { bindActionCreators } from 'redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from './store/reducers/default.types';
 import './App.css';
+import { dispatchActions } from './store';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App: React.FC = (): JSX.Element => {
+    const dispatch = useDispatch();
+
+    const { depositMoney, withdrawMoney, bankrupt } = bindActionCreators(
+        dispatchActions,
+        dispatch
+    );
+
+    const currentState = useSelector((state: State) => state.default);
+
+    return (
+        <div className='App'>
+            <h1>{currentState.total}</h1>
+            <button onClick={() => depositMoney(1234)} type='button'>
+                Deposit
+            </button>
+            <button onClick={() => withdrawMoney(500)} type='button'>
+                Withdrawn
+            </button>
+            <button onClick={() => bankrupt()} type='button'>
+                Bankrupt
+            </button>
+        </div>
+    );
+};
 
 export default App;
